@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OrganizationManagementSystem.Models;
+using System.Configuration;
 
 namespace OrganizationManagementSystem.Data
 {
@@ -12,9 +14,8 @@ namespace OrganizationManagementSystem.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer(
-                "Server=(local)\\SQLEXPRESS;Database=OrganizationDB;Trusted_Connection=True;TrustServerCertificate=True;"
-            );
+            string connString = ConfigurationManager.ConnectionStrings["OrganizationDb"].ConnectionString;
+            options.UseSqlServer(connString);
         }
     }
 }

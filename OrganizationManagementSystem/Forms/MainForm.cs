@@ -1,10 +1,7 @@
 ﻿using OrganizationManagementSystem.Data;
 using OrganizationManagementSystem.Models;
 using OrganizationManagementSystem.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+using Serilog;
 
 namespace OrganizationManagementSystem.Forms
 {
@@ -50,7 +47,9 @@ namespace OrganizationManagementSystem.Forms
         // ================= ADD =================
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            Log.Information("Adding new employee");
             new AddEmployeeForm().ShowDialog();
+
         }
 
         // ================= UPDATE =================
@@ -58,13 +57,15 @@ namespace OrganizationManagementSystem.Forms
         {
             dgvEmployees.ReadOnly = false;
             dgvEmployees.Columns["EmployeeId"].ReadOnly = true;
+            dgvEmployees.Columns["Name"].ReadOnly = false;
             EnableDropdownColumns();
         }
 
         // ================= SAVE =================
         private void btnSave_Click(object sender, EventArgs e)
         {
-            using (var db = new OrganizationDbContext())
+            Log.Information("updation started");
+            try
             {
                 foreach (DataGridViewRow row in dgvEmployees.Rows)
                 {
@@ -80,35 +81,40 @@ namespace OrganizationManagementSystem.Forms
                         string.IsNullOrWhiteSpace(role) ||
                         string.IsNullOrWhiteSpace(dept))
                     {
+                        Log.Warning("Name,Role,Department are mandatory");
                         MessageBox.Show("Name, Role and Department are mandatory.");
                         return;
                     }
-
-                    int roleId = GetRoleId(role, db);
-                    int deptId = GetDepartmentId(dept, db);
-                    int? managerId = role == "Manager"
-                        ? null
-                        : GetManagerId(manager, db);
-
-                    if (role != "Manager" && managerId == null)
-                    {
-                        MessageBox.Show("Employee must report to a Manager.");
-                        return;
-                    }
-
-                    employeeService.UpdateEmployee(id, name, roleId, deptId, managerId);
+                    //int roleId = GetRoleId(role, db);
+                    //int deptId = GetDepartmentId(dept, db);
+                    //int? managerId = role == "Manager"
+                    //    ? null
+                    //    : GetManagerId(manager, db);
+                    employeeService.SaveEmployee(
+                                      id,
+                                      name,
+                                      role,
+                                      dept,
+                                      manager);
+                   
                 }
+                dgvEmployees.ReadOnly = true;
+                Log.Information("updated successfully");
+                MessageBox.Show("Changes saved");
             }
-
-            dgvEmployees.ReadOnly = true;
-            MessageBox.Show("Changes saved");
+            catch (Exception exc)
+            {
+                Log.Error("updation is unsuccefull {exc}", exc.Message);
+                MessageBox.Show(exc.Message);
+            }
         }
-
         // ================= DELETE =================
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            Log.Information("Deleting the selected employee");
             if (dgvEmployees.SelectedRows.Count == 0)
             {
+                Log.Warning("please select a record to delete");
                 MessageBox.Show("Please select a record to delete.");
                 return;
             }
@@ -117,17 +123,22 @@ namespace OrganizationManagementSystem.Forms
                 "Are you sure you want to delete this employee?",
                 "Confirm Delete",
                 MessageBoxButtons.YesNo);
-
-            if (confirm != DialogResult.Yes)
-                return;
-
             int employeeId =
                 Convert.ToInt32(dgvEmployees.SelectedRows[0].Cells["EmployeeId"].Value);
 
-            employeeService.DeleteEmployee(employeeId);
+            if (confirm != DialogResult.Yes)
+            {
+                Log.Information("Delete cancelled by user");
+                return;
+            }
 
+            employeeService.DeleteEmployee(employeeId);
+            Log.Information("Employee deleted successfully");
             MessageBox.Show("Employee deleted successfully");
+
         }
+
+
 
         // ================= FILTER =================
         private void btnFilter_Click(object sender, EventArgs e)
@@ -222,32 +233,32 @@ namespace OrganizationManagementSystem.Forms
             return list;
         }
 
-        private int GetRoleId(string role, OrganizationDbContext db)
-        {
-            return db.Role
-                .Where(r => r.RoleName == role)
-                .Select(r => r.RoleId)
-                .FirstOrDefault();
-        }
+        //private int GetRoleId(string role, OrganizationDbContext db)
+        //{
+        //    return db.Role
+        //        .Where(r => r.RoleName == role)
+        //        .Select(r => r.RoleId)
+        //        .FirstOrDefault();
+        //}
 
-        private int GetDepartmentId(string dept, OrganizationDbContext db)
-        {
-            return db.Department
-                .Where(d => d.DepartmentName == dept)
-                .Select(d => d.DepartmentId)
-                .FirstOrDefault();
-        }
+        //private int GetDepartmentId(string dept, OrganizationDbContext db)
+        //{
+        //    return db.Department
+        //        .Where(d => d.DepartmentName == dept)
+        //        .Select(d => d.DepartmentId)
+        //        .FirstOrDefault();
+        //}
 
-        private int? GetManagerId(string manager, OrganizationDbContext db)
-        {
-            if (string.IsNullOrWhiteSpace(manager) || manager == "-")
-                return null;
+        //private int? GetManagerId(string manager, OrganizationDbContext db)
+        //{
+        //    if (string.IsNullOrWhiteSpace(manager) || manager == "-")
+        //        return null;
 
-            return db.Employee
-                .Where(e => e.Name == manager)
-                .Select(e => e.EmployeeId)
-                .FirstOrDefault();
-        }
+        //    return db.Employee
+        //        .Where(e => e.Name == manager)
+        //        .Select(e => e.EmployeeId)
+        //        .FirstOrDefault();
+        //}
 
         private int currentPage = 1;
         private int pagesize = 10;
@@ -265,6 +276,11 @@ namespace OrganizationManagementSystem.Forms
                 currentPage--;
                 ApplyFilter();
             }
+
+        }
+
+        private void employeeFilterControl1_Load(object sender, EventArgs e)
+        {
 
         }
     }
