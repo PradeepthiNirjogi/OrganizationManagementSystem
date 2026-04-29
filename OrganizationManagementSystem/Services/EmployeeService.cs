@@ -1,5 +1,7 @@
 ﻿using OrganizationManagementSystem.Data;
+using OrganizationManagementSystem.DataAccess.Repository;
 using OrganizationManagementSystem.Models;
+using Serilog;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +10,11 @@ namespace OrganizationManagementSystem.Services
     public class EmployeeService
     {
         // ================= FILTER =================
+        private readonly EmployeeRepository repo=new EmployeeRepository();
+        public EmployeeService()
+        {
+            
+        }
         public List<EmployeeGridModel> FilterRecord(
             int roleId,
             int deptId,
@@ -53,33 +60,38 @@ namespace OrganizationManagementSystem.Services
                     return;
 
                 context.Employee.Remove(employee);
+                Log.Information("Employee deleted from database. EmployeeId {EmployeeId}", employeeId);
                 context.SaveChanges();
             }
         }
-
-        // ================= UPDATE =================
-        public void UpdateEmployee(
-            int employeeId,
+        public void SaveEmployee(
+            int id,
             string name,
-            int roleId,
-            int departmentId,
-            int? managerId)
+            string role,
+            string department,
+            string manager)
         {
-            using (var context = new OrganizationDbContext())
+            if (string.IsNullOrWhiteSpace(name) ||
+                string.IsNullOrWhiteSpace(role) ||
+                string.IsNullOrWhiteSpace(department))
             {
-                var emp = context.Employee
-                                 .FirstOrDefault(e => e.EmployeeId == employeeId);
-
-                if (emp == null)
-                    return;
-
-                emp.Name = name;
-                emp.RoleId = roleId;
-                emp.DepartmentId = departmentId;
-                emp.ManagerId = managerId;
-
-                context.SaveChanges();
+                throw new Exception("Name, Role and Department are mandatory.");
             }
+
+            int roleId = repo.GetRoleId(role);
+            int deptId = repo.GetDepartmentId(department);
+
+            int? managerId = role == "Manager"
+                ? null
+                : repo.GetManagerId(manager);
+
+            if (role != "Manager" && managerId == null)
+            {
+                throw new Exception("Employee must report to a Manager.");
+            }
+
+            repo.UpdateEmployee(id, name, roleId, deptId, managerId);
         }
+
     }
 }
