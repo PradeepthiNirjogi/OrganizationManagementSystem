@@ -39,10 +39,25 @@
             cmbManager = new ComboBox();
             btnSave = new Button();
             btnCancel = new Button();
-            txtName = new TextBox();
             LabelEmail = new Label();
             statusStrip1 = new StatusStrip();
             txtEmail = new TextBox();
+            lblNameError = new Label();
+            txtName = new TextBox();
+            pnlNameBorder = new Panel();
+            pnlEmailBorder = new Panel();
+            pnlRoleNameBorder = new Panel();
+            pnlDeptBorder = new Panel();
+            pnlManagerBorder = new Panel();
+            lblEmailError = new Label();
+            lblRoleNameError = new Label();
+            lblDeptError = new Label();
+            lblManagerError = new Label();
+            pnlNameBorder.SuspendLayout();
+            pnlEmailBorder.SuspendLayout();
+            pnlRoleNameBorder.SuspendLayout();
+            pnlDeptBorder.SuspendLayout();
+            pnlManagerBorder.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -62,46 +77,47 @@
             LabelName.AutoSize = true;
             LabelName.Location = new Point(75, 94);
             LabelName.Name = "LabelName";
-            LabelName.Size = new Size(137, 25);
+            LabelName.Size = new Size(145, 25);
             LabelName.TabIndex = 1;
-            LabelName.Text = "Name              :";
+            LabelName.Text = "Name *             :";
             // 
             // LabelRole
             // 
             LabelRole.AutoSize = true;
-            LabelRole.Location = new Point(75, 202);
+            LabelRole.Location = new Point(75, 253);
             LabelRole.Name = "LabelRole";
-            LabelRole.Size = new Size(140, 25);
+            LabelRole.Size = new Size(148, 25);
             LabelRole.TabIndex = 2;
-            LabelRole.Text = "RoleName       :";
+            LabelRole.Text = "RoleName *      :";
             // 
             // cmbRole
             // 
             cmbRole.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbRole.FormattingEnabled = true;
-            cmbRole.Location = new Point(249, 194);
+            cmbRole.Location = new Point(3, 3);
             cmbRole.Name = "cmbRole";
-            cmbRole.Size = new Size(288, 28);
+            cmbRole.Size = new Size(311, 28);
             cmbRole.TabIndex = 3;
             cmbRole.SelectedIndexChanged += cmbRole_SelectedIndexChanged;
             // 
             // LabelDepartment
             // 
             LabelDepartment.AutoSize = true;
-            LabelDepartment.Location = new Point(70, 257);
+            LabelDepartment.Location = new Point(70, 331);
             LabelDepartment.Name = "LabelDepartment";
-            LabelDepartment.Size = new Size(145, 25);
+            LabelDepartment.Size = new Size(153, 25);
             LabelDepartment.TabIndex = 4;
-            LabelDepartment.Text = "Department     :";
+            LabelDepartment.Text = "Department *    :";
             // 
             // cmbDepartment
             // 
             cmbDepartment.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbDepartment.FormattingEnabled = true;
-            cmbDepartment.Location = new Point(249, 254);
+            cmbDepartment.Location = new Point(3, 3);
             cmbDepartment.Name = "cmbDepartment";
-            cmbDepartment.Size = new Size(288, 28);
+            cmbDepartment.Size = new Size(310, 28);
             cmbDepartment.TabIndex = 5;
+            cmbDepartment.SelectedIndexChanged += cmbDepartment_SelectedIndexChanged;
             // 
             // label4
             // 
@@ -114,7 +130,7 @@
             // LabelManager
             // 
             LabelManager.AutoSize = true;
-            LabelManager.Location = new Point(69, 319);
+            LabelManager.Location = new Point(70, 406);
             LabelManager.Name = "LabelManager";
             LabelManager.Size = new Size(143, 25);
             LabelManager.TabIndex = 8;
@@ -124,16 +140,17 @@
             // 
             cmbManager.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbManager.FormattingEnabled = true;
-            cmbManager.Location = new Point(249, 316);
+            cmbManager.Location = new Point(6, 3);
             cmbManager.Name = "cmbManager";
-            cmbManager.Size = new Size(292, 28);
+            cmbManager.Size = new Size(308, 28);
             cmbManager.TabIndex = 9;
+            cmbManager.SelectedIndexChanged += cmbManager_SelectedIndexChanged;
             // 
             // btnSave
             // 
             btnSave.BackColor = Color.RoyalBlue;
             btnSave.ForeColor = Color.WhiteSmoke;
-            btnSave.Location = new Point(261, 372);
+            btnSave.Location = new Point(249, 482);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(120, 42);
             btnSave.TabIndex = 10;
@@ -145,7 +162,7 @@
             // 
             btnCancel.BackColor = SystemColors.ControlDark;
             btnCancel.ForeColor = Color.WhiteSmoke;
-            btnCancel.Location = new Point(460, 372);
+            btnCancel.Location = new Point(449, 482);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(115, 42);
             btnCancel.TabIndex = 12;
@@ -153,60 +170,165 @@
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
-            // txtName
-            // 
-            txtName.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtName.Location = new Point(249, 94);
-            txtName.Name = "txtName";
-            txtName.PlaceholderText = "Enter Employee Name";
-            txtName.Size = new Size(288, 27);
-            txtName.TabIndex = 13;
-            // 
             // LabelEmail
             // 
             LabelEmail.AutoSize = true;
-            LabelEmail.Location = new Point(75, 146);
+            LabelEmail.Location = new Point(75, 171);
             LabelEmail.Name = "LabelEmail";
-            LabelEmail.Size = new Size(138, 25);
+            LabelEmail.Size = new Size(151, 25);
             LabelEmail.TabIndex = 14;
-            LabelEmail.Text = "Email               :";
+            LabelEmail.Text = "Email *               :";
             // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(20, 20);
-            statusStrip1.Location = new Point(0, 417);
+            statusStrip1.Location = new Point(0, 538);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(807, 22);
+            statusStrip1.Size = new Size(936, 22);
             statusStrip1.TabIndex = 15;
             statusStrip1.Text = "statusStrip1";
             // 
             // txtEmail
             // 
             txtEmail.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtEmail.Location = new Point(249, 146);
+            txtEmail.Location = new Point(3, 3);
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "Enter the Employee Mail";
-            txtEmail.Size = new Size(288, 27);
+            txtEmail.Size = new Size(311, 27);
             txtEmail.TabIndex = 16;
+            txtEmail.Leave += txtEmail_Leave;
+            // 
+            // lblNameError
+            // 
+            lblNameError.AutoSize = true;
+            lblNameError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNameError.ForeColor = Color.Red;
+            lblNameError.Location = new Point(253, 125);
+            lblNameError.Name = "lblNameError";
+            lblNameError.Size = new Size(0, 17);
+            lblNameError.TabIndex = 17;
+            lblNameError.Visible = false;
+            // 
+            // txtName
+            // 
+            txtName.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtName.Location = new Point(3, 4);
+            txtName.Name = "txtName";
+            txtName.PlaceholderText = "Enter Employee Name";
+            txtName.Size = new Size(311, 27);
+            txtName.TabIndex = 13;
+            txtName.Leave += txtName_Leave;
+            // 
+            // pnlNameBorder
+            // 
+            pnlNameBorder.BackColor = Color.LightGray;
+            pnlNameBorder.Controls.Add(txtName);
+            pnlNameBorder.Location = new Point(260, 94);
+            pnlNameBorder.Name = "pnlNameBorder";
+            pnlNameBorder.Size = new Size(317, 34);
+            pnlNameBorder.TabIndex = 18;
+            // 
+            // pnlEmailBorder
+            // 
+            pnlEmailBorder.BackColor = Color.LightGray;
+            pnlEmailBorder.Controls.Add(txtEmail);
+            pnlEmailBorder.Location = new Point(260, 171);
+            pnlEmailBorder.Name = "pnlEmailBorder";
+            pnlEmailBorder.Size = new Size(317, 34);
+            pnlEmailBorder.TabIndex = 18;
+            // 
+            // pnlRoleNameBorder
+            // 
+            pnlRoleNameBorder.BackColor = Color.LightGray;
+            pnlRoleNameBorder.Controls.Add(cmbRole);
+            pnlRoleNameBorder.Location = new Point(260, 253);
+            pnlRoleNameBorder.Name = "pnlRoleNameBorder";
+            pnlRoleNameBorder.Size = new Size(317, 34);
+            pnlRoleNameBorder.TabIndex = 18;
+            // 
+            // pnlDeptBorder
+            // 
+            pnlDeptBorder.BackColor = Color.LightGray;
+            pnlDeptBorder.Controls.Add(cmbDepartment);
+            pnlDeptBorder.Location = new Point(261, 326);
+            pnlDeptBorder.Name = "pnlDeptBorder";
+            pnlDeptBorder.Size = new Size(317, 34);
+            pnlDeptBorder.TabIndex = 18;
+            // 
+            // pnlManagerBorder
+            // 
+            pnlManagerBorder.BackColor = Color.LightGray;
+            pnlManagerBorder.Controls.Add(cmbManager);
+            pnlManagerBorder.Location = new Point(257, 405);
+            pnlManagerBorder.Name = "pnlManagerBorder";
+            pnlManagerBorder.Size = new Size(317, 34);
+            pnlManagerBorder.TabIndex = 18;
+            // 
+            // lblEmailError
+            // 
+            lblEmailError.AutoSize = true;
+            lblEmailError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblEmailError.ForeColor = Color.Red;
+            lblEmailError.Location = new Point(264, 208);
+            lblEmailError.Name = "lblEmailError";
+            lblEmailError.Size = new Size(0, 17);
+            lblEmailError.TabIndex = 19;
+            lblEmailError.Visible = false;
+            // 
+            // lblRoleNameError
+            // 
+            lblRoleNameError.AutoSize = true;
+            lblRoleNameError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblRoleNameError.ForeColor = Color.FromArgb(192, 0, 0);
+            lblRoleNameError.Location = new Point(264, 290);
+            lblRoleNameError.Name = "lblRoleNameError";
+            lblRoleNameError.Size = new Size(0, 17);
+            lblRoleNameError.TabIndex = 20;
+            lblRoleNameError.Visible = false;
+            // 
+            // lblDeptError
+            // 
+            lblDeptError.AutoSize = true;
+            lblDeptError.ForeColor = Color.FromArgb(192, 0, 0);
+            lblDeptError.Location = new Point(264, 363);
+            lblDeptError.Name = "lblDeptError";
+            lblDeptError.Size = new Size(0, 25);
+            lblDeptError.TabIndex = 21;
+            lblDeptError.Visible = false;
+            // 
+            // lblManagerError
+            // 
+            lblManagerError.AutoSize = true;
+            lblManagerError.ForeColor = Color.FromArgb(192, 0, 0);
+            lblManagerError.Location = new Point(261, 442);
+            lblManagerError.Name = "lblManagerError";
+            lblManagerError.Size = new Size(0, 25);
+            lblManagerError.TabIndex = 22;
+            lblManagerError.Visible = false;
             // 
             // AddEmployeeForm
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(807, 439);
-            Controls.Add(txtEmail);
+            ClientSize = new Size(936, 560);
+            Controls.Add(lblManagerError);
+            Controls.Add(lblDeptError);
+            Controls.Add(lblRoleNameError);
+            Controls.Add(lblEmailError);
+            Controls.Add(pnlManagerBorder);
+            Controls.Add(pnlDeptBorder);
+            Controls.Add(pnlRoleNameBorder);
+            Controls.Add(pnlEmailBorder);
+            Controls.Add(pnlNameBorder);
+            Controls.Add(lblNameError);
             Controls.Add(statusStrip1);
             Controls.Add(LabelEmail);
-            Controls.Add(txtName);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
-            Controls.Add(cmbManager);
             Controls.Add(LabelManager);
             Controls.Add(label4);
-            Controls.Add(cmbDepartment);
             Controls.Add(LabelDepartment);
-            Controls.Add(cmbRole);
             Controls.Add(LabelRole);
             Controls.Add(LabelName);
             Controls.Add(label1);
@@ -220,6 +342,13 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add New Employee";
             Load += AddEmployeeForm_Load;
+            pnlNameBorder.ResumeLayout(false);
+            pnlNameBorder.PerformLayout();
+            pnlEmailBorder.ResumeLayout(false);
+            pnlEmailBorder.PerformLayout();
+            pnlRoleNameBorder.ResumeLayout(false);
+            pnlDeptBorder.ResumeLayout(false);
+            pnlManagerBorder.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -237,9 +366,19 @@
         private ComboBox cmbManager;
         private Button btnSave;
         private Button btnCancel;
-        private TextBox txtName;
         private Label LabelEmail;
         private StatusStrip statusStrip1;
         private TextBox txtEmail;
+        private Label lblNameError;
+        private TextBox txtName;
+        private Panel pnlNameBorder;
+        private Panel pnlEmailBorder;
+        private Panel pnlRoleNameBorder;
+        private Panel pnlDeptBorder;
+        private Panel pnlManagerBorder;
+        private Label lblEmailError;
+        private Label lblRoleNameError;
+        private Label lblDeptError;
+        private Label lblManagerError;
     }
 }
