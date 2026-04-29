@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OrganizationManagementSystem": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\AU001DJR\\source\\repos\\OrganizationManagementSystem\\OrganizationManagementSystem"
+    }
+  }
+}
