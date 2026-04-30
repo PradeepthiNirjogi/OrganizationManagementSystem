@@ -162,7 +162,7 @@
             // 
             // employeeFilterControl1
             // 
-            employeeFilterControl1.Location = new Point(62, 12);
+            employeeFilterControl1.Location = new Point(91, 12);
             employeeFilterControl1.Name = "employeeFilterControl1";
             employeeFilterControl1.Size = new Size(856, 213);
             employeeFilterControl1.TabIndex = 11;
