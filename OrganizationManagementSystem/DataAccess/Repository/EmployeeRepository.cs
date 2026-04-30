@@ -11,29 +11,48 @@ namespace OrganizationManagementSystem.DataAccess.Repository
     {
 
         //to update the data
-        public void UpdateEmployee(
+        public async Task UpdateEmployee(
+
            int employeeId,
+
            string name,
+
            int roleId,
+
            int departmentId,
+
            int? managerId)
+
         {
 
+
             using (var context = new OrganizationDbContext())
+
             {
+
                 var emp = context.Employee
+
                                  .FirstOrDefault(e => e.EmployeeId == employeeId);
 
+
                 if (emp == null)
+
                     return;
 
+
                 emp.Name = name;
+
                 emp.RoleId = roleId;
+
                 emp.DepartmentId = departmentId;
+
                 emp.ManagerId = managerId;
 
+
                 context.SaveChanges();
+
             }
+
         }
         public int GetRoleId(string role)
         {

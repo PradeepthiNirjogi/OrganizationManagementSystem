@@ -43,13 +43,13 @@ namespace OrganizationManagementSystem.Services
                 context.SaveChanges();
             }
         }
-        public void SaveEmployee(
-            int id,
-            string name,
-            string role,
-            string department,
-            string manager)
-        {
+        public async Task SaveEmployee(
+     int id,
+     string name,
+     string role,
+     string department,
+     string manager)
+        {         
             if (string.IsNullOrWhiteSpace(name) ||
                 string.IsNullOrWhiteSpace(role) ||
                 string.IsNullOrWhiteSpace(department))

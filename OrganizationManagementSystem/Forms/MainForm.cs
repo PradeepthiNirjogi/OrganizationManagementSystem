@@ -51,7 +51,7 @@ namespace OrganizationManagementSystem.Forms
         }
 
         // ================= SAVE =================
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             Log.Information("updation started");
             try
@@ -79,7 +79,7 @@ namespace OrganizationManagementSystem.Forms
                     //int? managerId = role == "Manager"
                     //    ? null
                     //    : GetManagerId(manager, db);
-                    employeeService.SaveEmployee(
+                    await employeeService.SaveEmployee(
                                       id,
                                       name,
                                       role,
@@ -232,6 +232,7 @@ namespace OrganizationManagementSystem.Forms
         }
 
 
+       
         private void btnNext_Click(object sender, EventArgs e)
         {
             Log.Information("clicking on the next btn loading next page");
