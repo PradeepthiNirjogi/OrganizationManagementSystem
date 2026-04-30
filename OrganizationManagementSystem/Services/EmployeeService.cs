@@ -15,6 +15,7 @@ namespace OrganizationManagementSystem.Services
         {
             
         }
+
         public List<EmployeeGridModel> FilterRecord(
             int roleId,
             int deptId,
@@ -23,29 +24,7 @@ namespace OrganizationManagementSystem.Services
             int pageNumber,
             int pageSize)
         {
-            using (var context = new OrganizationDbContext())
-            {
-                return context.Employee
-                    .Where(e =>
-                        (roleId == 0 || e.RoleId == roleId) &&
-                        (deptId == 0 || e.DepartmentId == deptId) &&
-                        (string.IsNullOrWhiteSpace(name) || e.Name.Contains(name)) &&
-                        (managerId == 0 || e.ManagerId == managerId)
-                    )
-                    .OrderBy(e=>e.EmployeeId)
-                    .Skip((pageNumber-1)*pageSize)
-                    .Take(pageSize)
-                    .Select(e => new EmployeeGridModel
-                    {
-                        EmployeeId = e.EmployeeId,
-                        Name = e.Name,
-                        RoleName = e.Role.RoleName,
-                        Department = e.Department.DepartmentName,
-                        Manager = e.Manager != null ? e.Manager.Name : "-",
-                        ManagerId = e.ManagerId
-                    })
-                    .ToList();
-            }
+            return repo.FilterRecord(roleId, deptId, name, managerId, pageNumber, pageSize);
         }
 
         // ================= DELETE =================
@@ -81,41 +60,65 @@ namespace OrganizationManagementSystem.Services
             int roleId = repo.GetRoleId(role);
             int deptId = repo.GetDepartmentId(department);
 
-            int? managerId = role == "Manager"
+            int? newmanagerId = role == "Manager"
                 ? null
                 : repo.GetManagerId(manager);
 
-            if (role != "Manager" && managerId == null)
+            //if (role != "Manager" && managerId == null)
+            //{
+            //    throw new Exception("Employee must report to a Manager.");
+            //}
+            int managerroleId = repo.GetRoleId("Manager");
+            int currentRoleId = repo.GetCurrentRoleId(id);
+            if (currentRoleId ==  managerroleId && roleId != managerroleId)
             {
-                throw new Exception("Employee must report to a Manager.");
+                throw new Exception("manager can't be a employee");
             }
+            if (roleId ==managerroleId)
+            {
+                manager = null;
+                Log.Information("when the roles like developer or other becomes managers the manager id need to be null");
 
-            repo.UpdateEmployee(id, name, roleId, deptId, managerId);
+            }
+            //if (role == manager)
+            //{
+            //    throw new Exception("Manager can't be a developer");
+            //}
+
+            repo.UpdateEmployee(id, name, roleId, deptId, newmanagerId);
         }
 
-            // ================= EMAIL VALIDATION =================
-            public bool IsEmailExists(string email)
-            {
-                using (var context = new OrganizationDbContext())
-                {
-                    return context.Employee
-                        .Any(e => e.Email.ToLower() == email.ToLower());
-                }
-            }
-
-            // ================= ADD =================
-            public void AddEmployee(Employee model)
-            {
-                if (model == null)
-                    throw new Exception("Employee data is missing");
-
-                if (IsEmailExists(model.Email))
-                    throw new Exception("Email already exists");
-
-                if (model.ManagerId != null && model.ManagerId == model.EmployeeId)
-                    throw new Exception("Employee cannot be their own manager");
-
-                repo.Add(model);
+         
+    // ================= EMAIL VALIDATION =================
+    public bool IsEmailExists(string email)
+    {
+        using (var context = new OrganizationDbContext())
+        {
+            return context.Employee
+                .Any(e => e.Email.ToLower() == email.ToLower());
         }
+}
+
+// ================= ADD =================
+ public void AddEmployee(Employee model)
+{
+    if (model == null)
+        throw new Exception("Employee data is missing");
+
+    if (IsEmailExists(model.Email))
+        throw new Exception("Email already exists");
+
+    if (model.ManagerId != null && model.ManagerId == model.EmployeeId)
+        throw new Exception("Employee cannot be their own manager");
+
+    repo.Add(model);
+}
+
+
+public List<string> GetEmployeeDetailsUnderManager(int id)
+        {
+           return repo.GetEmployeesUnderManager(id);
+        }
+
     }
 }
