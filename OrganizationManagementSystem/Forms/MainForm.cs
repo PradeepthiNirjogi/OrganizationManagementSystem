@@ -1,4 +1,5 @@
 ﻿using OrganizationManagementSystem.Data;
+using OrganizationManagementSystem.DataAccess.Repository;
 using OrganizationManagementSystem.Models;
 using OrganizationManagementSystem.Services;
 using Serilog;
@@ -8,8 +9,11 @@ namespace OrganizationManagementSystem.Forms
     public partial class MainForm : Form
     {
         private readonly EmployeeService employeeService = new EmployeeService();
+        private readonly EmployeeRepository repo = new EmployeeRepository();
 
-        // ================= FORM LOAD =================
+        private int currentPage = 1;
+        private int pagesize = 10;
+
         public MainForm()
         {
             InitializeComponent();
@@ -22,26 +26,10 @@ namespace OrganizationManagementSystem.Forms
         // ================= LOAD =================
         private void LoadEmployee()
         {
-            using (var db = new OrganizationDbContext())
-            {
-                var data =
-                    from e in db.Employee
-                    join d in db.Department on e.DepartmentId equals d.DepartmentId
-                    join r in db.Role on e.RoleId equals r.RoleId
-                    join m in db.Employee on e.ManagerId equals m.EmployeeId into mgr
-                    from m in mgr.DefaultIfEmpty()
-                    select new EmployeeGridModel
-                    {
-                        EmployeeId = e.EmployeeId,
-                        Name = e.Name,
-                        RoleName = r.RoleName,
-                        Department = d.DepartmentName,
-                        Manager = m != null ? m.Name : "-",
-                        ManagerId = e.ManagerId
-                    };
+            Log.Information("loading the data");
+            var data = repo.LoadEmployeeData();
+            dgvEmployees.DataSource = data;
 
-                dgvEmployees.DataSource = data.ToList();
-            }
         }
 
         // ================= ADD =================
@@ -112,31 +100,62 @@ namespace OrganizationManagementSystem.Forms
         private void btnDelete_Click(object sender, EventArgs e)
         {
             Log.Information("Deleting the selected employee");
-            if (dgvEmployees.SelectedRows.Count == 0)
-            {
-                Log.Warning("please select a record to delete");
-                MessageBox.Show("Please select a record to delete.");
-                return;
+            try {
+                if (dgvEmployees.SelectedRows.Count == 0)
+                {
+                    Log.Warning("please select a record to delete");
+                    MessageBox.Show("Please select a record to delete.");
+                    return;
+                }
+
+
+                string roleName = (string)dgvEmployees.SelectedRows[0].Cells["RoleName"].Value;
+                string name = (string)dgvEmployees.SelectedRows[0].Cells["Name"].Value;
+                int id = Convert.ToInt32(dgvEmployees.SelectedRows[0].Cells["EmployeeId"].Value);
+                List<string> empnames = employeeService.GetEmployeeDetailsUnderManager(id);
+
+                //checking if employee is a manager first update the manager for employees who are under deleting manager
+                Log.Information("if any managers has subcordinates then first need to edit the managers for subcordinates");
+                if (roleName == "Manager" && empnames.Count > 0)
+                {
+                    if (empnames.Any())
+                    {
+                        string employees = string.Join(", ", empnames);
+                        Log.Information($"{employees} under {empnames}");
+                        MessageBox.Show(
+                            $"{name} is the manager for other employees.\n\n" +
+                            $"Please update the manager for these employees before deleting:\n" +
+                            employees,
+                            "Delete Not Allowed",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+
+                        return;
+                    }
+                }
+                var confirm = MessageBox.Show(
+                    "Are you sure you want to delete this employee?",
+                    "Confirm Delete",
+                    MessageBoxButtons.YesNo);
+                int employeeId =
+                    Convert.ToInt32(dgvEmployees.SelectedRows[0].Cells["EmployeeId"].Value);
+
+                if (confirm != DialogResult.Yes)
+                {
+                    Log.Warning("Delete cancelled by user");
+                    return;
+                }
+
+                employeeService.DeleteEmployee(employeeId);
+                Log.Information("Employee deleted successfully");
+                MessageBox.Show("Employee deleted successfully");
             }
-
-            var confirm = MessageBox.Show(
-                "Are you sure you want to delete this employee?",
-                "Confirm Delete",
-                MessageBoxButtons.YesNo);
-            int employeeId =
-                Convert.ToInt32(dgvEmployees.SelectedRows[0].Cells["EmployeeId"].Value);
-
-            if (confirm != DialogResult.Yes)
+            catch(Exception ex)
             {
-                Log.Information("Delete cancelled by user");
-                return;
+                Log.Error("unexpected error occured during deletion {ex}", ex.Message);
+                MessageBox.Show("unexpected error occured during deletion {ex}\", ex.Message");
             }
-
-            employeeService.DeleteEmployee(employeeId);
-            Log.Information("Employee deleted successfully");
-            MessageBox.Show("Employee deleted successfully");
-
-        }
+            }
 
 
 
@@ -190,7 +209,7 @@ namespace OrganizationManagementSystem.Forms
             {
                 Name = "RoleName",
                 DataPropertyName = "RoleName",
-                DataSource = GetRole()
+                DataSource = repo.GetRole()
             });
 
             dgvEmployees.Columns.Remove("Department");
@@ -198,7 +217,7 @@ namespace OrganizationManagementSystem.Forms
             {
                 Name = "Department",
                 DataPropertyName = "Department",
-                DataSource = GetDepartment()
+                DataSource = repo.GetDepartment()
             });
 
             dgvEmployees.Columns.Remove("Manager");
@@ -206,74 +225,26 @@ namespace OrganizationManagementSystem.Forms
             {
                 Name = "Manager",
                 DataPropertyName = "Manager",
-                DataSource = GetManagers()
+                DataSource = repo.GetManagers()
             });
         }
-        //Reads rolename,dep and mana from db
-        private List<string> GetRole()
-        {
-            using var db = new OrganizationDbContext();
-            return db.Role.Select(r => r.RoleName).ToList();
-        }
 
-        private List<string> GetDepartment()
-        {
-            using var db = new OrganizationDbContext();
-            return db.Department.Select(d => d.DepartmentName).ToList();
-        }
-
-        private List<string> GetManagers()
-        {
-            using var db = new OrganizationDbContext();
-            var list = db.Employee
-                .Where(e => e.RoleId == 1)
-                .Select(e => e.Name)
-                .ToList();
-            list.Insert(0, "-");
-            return list;
-        }
-
-        //private int GetRoleId(string role, OrganizationDbContext db)
-        //{
-        //    return db.Role
-        //        .Where(r => r.RoleName == role)
-        //        .Select(r => r.RoleId)
-        //        .FirstOrDefault();
-        //}
-
-        //private int GetDepartmentId(string dept, OrganizationDbContext db)
-        //{
-        //    return db.Department
-        //        .Where(d => d.DepartmentName == dept)
-        //        .Select(d => d.DepartmentId)
-        //        .FirstOrDefault();
-        //}
-
-        //private int? GetManagerId(string manager, OrganizationDbContext db)
-        //{
-        //    if (string.IsNullOrWhiteSpace(manager) || manager == "-")
-        //        return null;
-
-        //    return db.Employee
-        //        .Where(e => e.Name == manager)
-        //        .Select(e => e.EmployeeId)
-        //        .FirstOrDefault();
-        //}
-
-        private int currentPage = 1;
-        private int pagesize = 10;
-
+       
         private void btnNext_Click(object sender, EventArgs e)
         {
+            Log.Information("clicking on the next btn loading next page");
             currentPage++;
+            Log.Information("loaded successfully");
             ApplyFilter();
         }
 
         private void btnPrevious_Click(object sender, EventArgs e)
         {
+            Log.Information("clicking on the prev btn loading prev page");
             if (currentPage > 1)
             {
                 currentPage--;
+                Log.Information("loaded successfully");
                 ApplyFilter();
             }
 
