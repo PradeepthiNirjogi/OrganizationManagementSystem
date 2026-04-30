@@ -122,9 +122,9 @@ namespace OrganizationManagementSystem.DataAccess.Repository
             int managerId,
             int pageNumber,
             int pageSize)
-        {
-            using (var context = new OrganizationDbContext())
             {
+                using (var context = new OrganizationDbContext())
+                {
                 return context.Employee
                     .Where(e =>
                         (roleId == 0 || e.RoleId == roleId) &&
@@ -158,10 +158,10 @@ namespace OrganizationManagementSystem.DataAccess.Repository
         {
             using var db = new OrganizationDbContext();
             return db.Department.Select(d => d.DepartmentName).ToList();
-        }
+                }
 
         
-        -public List<string> GetManagers()
+        public List<string> GetManagers()
         {
             using var db = new OrganizationDbContext();
             var list = db.Employee
@@ -170,6 +170,21 @@ namespace OrganizationManagementSystem.DataAccess.Repository
                 .ToList();
             list.Insert(0, "-");
             return list;
+            }
+        public void Add(Employee e)
+
+        {
+
+            using (var context = new OrganizationDbContext())
+
+            {
+
+                context.Add(e);
+
+                context.SaveChanges();
+
+            }
+
         }
     }
 }

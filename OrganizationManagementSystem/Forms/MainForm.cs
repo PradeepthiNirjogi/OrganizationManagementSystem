@@ -249,10 +249,5 @@ namespace OrganizationManagementSystem.Forms
             }
 
         }
-
-        private void employeeFilterControl1_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }
