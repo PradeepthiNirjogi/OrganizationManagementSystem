@@ -84,7 +84,7 @@
             // LabelRole
             // 
             LabelRole.AutoSize = true;
-            LabelRole.Location = new Point(75, 253);
+            LabelRole.Location = new Point(67, 328);
             LabelRole.Name = "LabelRole";
             LabelRole.Size = new Size(148, 25);
             LabelRole.TabIndex = 2;
@@ -94,7 +94,7 @@
             // 
             cmbRole.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbRole.FormattingEnabled = true;
-            cmbRole.Location = new Point(3, 3);
+            cmbRole.Location = new Point(3, 2);
             cmbRole.Name = "cmbRole";
             cmbRole.Size = new Size(311, 28);
             cmbRole.TabIndex = 3;
@@ -103,7 +103,7 @@
             // LabelDepartment
             // 
             LabelDepartment.AutoSize = true;
-            LabelDepartment.Location = new Point(70, 331);
+            LabelDepartment.Location = new Point(67, 253);
             LabelDepartment.Name = "LabelDepartment";
             LabelDepartment.Size = new Size(153, 25);
             LabelDepartment.TabIndex = 4;
@@ -240,7 +240,7 @@
             // pnlRoleNameBorder
             // 
             pnlRoleNameBorder.BackColor = Color.LightGray;
-            pnlRoleNameBorder.Controls.Add(cmbRole);
+            pnlRoleNameBorder.Controls.Add(cmbDepartment);
             pnlRoleNameBorder.Location = new Point(260, 253);
             pnlRoleNameBorder.Name = "pnlRoleNameBorder";
             pnlRoleNameBorder.Size = new Size(317, 34);
@@ -249,7 +249,7 @@
             // pnlDeptBorder
             // 
             pnlDeptBorder.BackColor = Color.LightGray;
-            pnlDeptBorder.Controls.Add(cmbDepartment);
+            pnlDeptBorder.Controls.Add(cmbRole);
             pnlDeptBorder.Location = new Point(261, 326);
             pnlDeptBorder.Name = "pnlDeptBorder";
             pnlDeptBorder.Size = new Size(317, 34);
@@ -279,7 +279,7 @@
             // 
             lblRoleNameError.AutoSize = true;
             lblRoleNameError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRoleNameError.ForeColor = Color.FromArgb(192, 0, 0);
+            lblRoleNameError.ForeColor = Color.Red;
             lblRoleNameError.Location = new Point(264, 290);
             lblRoleNameError.Name = "lblRoleNameError";
             lblRoleNameError.Size = new Size(0, 17);
@@ -289,20 +289,22 @@
             // lblDeptError
             // 
             lblDeptError.AutoSize = true;
-            lblDeptError.ForeColor = Color.FromArgb(192, 0, 0);
-            lblDeptError.Location = new Point(264, 363);
+            lblDeptError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDeptError.ForeColor = Color.Red;
+            lblDeptError.Location = new Point(263, 363);
             lblDeptError.Name = "lblDeptError";
-            lblDeptError.Size = new Size(0, 25);
+            lblDeptError.Size = new Size(0, 17);
             lblDeptError.TabIndex = 21;
-            lblDeptError.Visible = false;
+            lblDeptError.Click += label2_Click;
             // 
             // lblManagerError
             // 
             lblManagerError.AutoSize = true;
-            lblManagerError.ForeColor = Color.FromArgb(192, 0, 0);
-            lblManagerError.Location = new Point(261, 442);
+            lblManagerError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblManagerError.ForeColor = Color.Red;
+            lblManagerError.Location = new Point(264, 442);
             lblManagerError.Name = "lblManagerError";
-            lblManagerError.Size = new Size(0, 25);
+            lblManagerError.Size = new Size(0, 17);
             lblManagerError.TabIndex = 22;
             lblManagerError.Visible = false;
             // 

@@ -1,8 +1,10 @@
 ﻿using OrganizationManagementSystem.Data;
 using OrganizationManagementSystem.Helpers;
 using OrganizationManagementSystem.Models;
+using OrganizationManagementSystem.Services;
 using Serilog;
 using System.Text.RegularExpressions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace OrganizationManagementSystem.Forms
 {
@@ -15,7 +17,7 @@ namespace OrganizationManagementSystem.Forms
 
         private void LoadDropdowns()
         {
-            DropdownHelper.LoadRoles(cmbRole);
+            DropdownHelper.LoadRoles(cmbRole); 
             DropdownHelper.LoadDepartments(cmbDepartment);
             DropdownHelper.LoadManagers(cmbManager);
         }
@@ -71,6 +73,14 @@ namespace OrganizationManagementSystem.Forms
                 return false;
             }
 
+            if (!txtEmail.Text.EndsWith("@org.com", StringComparison.OrdinalIgnoreCase))
+            {
+                lblEmailError.Text = "Only company email (@org.com) is allowed";
+                lblEmailError.Visible = true;
+                pnlEmailBorder.BackColor = Color.LightCoral;
+                return false;
+            }
+
             lblEmailError.Visible = false;
             pnlEmailBorder.BackColor = Color.Gray;
             return true;
@@ -111,26 +121,40 @@ namespace OrganizationManagementSystem.Forms
 
         private bool ValidateManager()
         {
-            if (isFormLoading) return true;
+            if (!isSaving)
+                return true;
 
-            if (cmbRole.Text != "Manager")
+            if (!cmbManager.Enabled)
             {
-                if (!int.TryParse(cmbManager.SelectedValue?.ToString(), out int mgrId) || mgrId == 0)
-                {
-                    lblManagerError.Text = ValidationMessages.ManagerRequired;
-                    lblManagerError.Visible = true;
-                    pnlManagerBorder.BackColor = Color.LightCoral;
-                    return false;
-                }
+                lblManagerError.Visible = false;
+                pnlManagerBorder.BackColor = Color.Gray;
+                return true;
+            }
+
+            if (cmbRole.Text == "Manager")
+            {
+                lblManagerError.Visible = false;
+                pnlManagerBorder.BackColor = Color.Gray;
+                return true;
+            }
+
+            if (!int.TryParse(cmbManager.SelectedValue?.ToString(), out int mgrId) || mgrId == 0)
+            {
+                lblManagerError.Text = ValidationMessages.ManagerRequired;
+                lblManagerError.Visible = true;
+                pnlManagerBorder.BackColor = Color.LightCoral;
+                return false;
             }
 
             lblManagerError.Visible = false;
             pnlManagerBorder.BackColor = Color.Gray;
             return true;
         }
-
+        private bool isSaving = false;
         private void btnSave_Click(object sender, EventArgs e)
         {
+            isSaving = true;   
+
             bool isValid =
                 ValidateName() &&
                 ValidateEmail() &&
@@ -138,40 +162,37 @@ namespace OrganizationManagementSystem.Forms
                 ValidateDepartment() &&
                 ValidateManager();
 
+            isSaving = false;
+
             if (!isValid)
                 return;
 
-            // Save logic
-
             try
             {
-                using (var db = new OrganizationDbContext())
+                var emp = new Employee
                 {
-                    Employee emp = new Employee
-                    {
-                        Name = txtName.Text.Trim(),
-                        Email = txtEmail.Text.Trim(),
-                        RoleId = (int)cmbRole.SelectedValue,
-                        DepartmentId = (int)cmbDepartment.SelectedValue,
-                        ManagerId = cmbRole.Text == "Manager"
+                    Name = txtName.Text.Trim(),
+                    Email = txtEmail.Text.Trim(),
+                    RoleId = (int)cmbRole.SelectedValue,
+                    DepartmentId = (int)cmbDepartment.SelectedValue,
+                    ManagerId = cmbRole.Text == "Manager"
                                     ? null
                                     : (int)cmbManager.SelectedValue,
-                        CreatedDate = DateTime.Now
-                    };
+                    CreatedDate = DateTime.Now
+                };
 
-                    db.Employee.Add(emp);
-                    db.SaveChanges();
-                }
-                Log.Information($"added employee successfully \"{txtName.Text.Trim()}\"");
+                var service = new EmployeeService();
+                service.AddEmployee(emp);
+
                 MessageBox.Show("Employee added successfully");
                 this.Close();
             }
             catch (Exception ex)
             {
-                Log.Error("Error occured while adding employee");
                 MessageBox.Show(ex.Message, "Error");
             }
         }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -203,15 +224,48 @@ namespace OrganizationManagementSystem.Forms
 
         private void txtEmail_Leave(object sender, EventArgs e)
         {
-            ValidateEmail();
-        }
+            if (!ValidateEmail())
+                return;
 
+            var service = new EmployeeService();
+
+            if (service.IsEmailExists(txtEmail.Text.Trim()))
+            {
+                lblEmailError.Text = "Email already exists";
+                lblEmailError.Visible = true;
+                pnlEmailBorder.BackColor = Color.LightCoral;
+            }
+            else
+            {
+                lblEmailError.Visible = false;
+                pnlEmailBorder.BackColor = Color.Gray;
+            }
+        }
 
 
         private void cmbDepartment_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isFormLoading) return;
-            ValidateDepartment();
+
+            string dept = cmbDepartment.Text;
+
+            if (dept == "HR" || dept == "Finance" || dept == "Support")
+            {
+                cmbRole.SelectedIndex = -1;
+                cmbRole.Text = "Manager";
+                cmbRole.Enabled = false;
+
+                cmbManager.SelectedIndex = 0;
+                cmbManager.Enabled = false;
+            }
+            else
+            {
+                cmbRole.Enabled = true;
+                cmbRole.SelectedIndex = 0;   
+
+                cmbManager.Enabled = true;
+                cmbManager.SelectedIndex = 0;
+            }
         }
 
         private void cmbManager_SelectedIndexChanged(object sender, EventArgs e)
@@ -220,5 +274,9 @@ namespace OrganizationManagementSystem.Forms
             ValidateManager();
         }
 
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

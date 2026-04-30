@@ -93,5 +93,29 @@ namespace OrganizationManagementSystem.Services
             repo.UpdateEmployee(id, name, roleId, deptId, managerId);
         }
 
+            // ================= EMAIL VALIDATION =================
+            public bool IsEmailExists(string email)
+            {
+                using (var context = new OrganizationDbContext())
+                {
+                    return context.Employee
+                        .Any(e => e.Email.ToLower() == email.ToLower());
+                }
+            }
+
+            // ================= ADD =================
+            public void AddEmployee(Employee model)
+            {
+                if (model == null)
+                    throw new Exception("Employee data is missing");
+
+                if (IsEmailExists(model.Email))
+                    throw new Exception("Email already exists");
+
+                if (model.ManagerId != null && model.ManagerId == model.EmployeeId)
+                    throw new Exception("Employee cannot be their own manager");
+
+                repo.Add(model);
+        }
     }
 }

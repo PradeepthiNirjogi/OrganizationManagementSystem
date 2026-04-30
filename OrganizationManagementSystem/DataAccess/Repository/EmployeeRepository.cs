@@ -1,8 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OrganizationManagementSystem.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using OrganizationManagementSystem.Data;
+using OrganizationManagementSystem.Models;
 
 namespace OrganizationManagementSystem.DataAccess.Repository
 {
@@ -68,5 +65,15 @@ namespace OrganizationManagementSystem.DataAccess.Repository
                     .FirstOrDefault();
             }
         }
+
+        //add
+            public void Add(Employee e)
+            {
+                using (var context = new OrganizationDbContext())
+                {
+                    context.Add(e);
+                    context.SaveChanges();
+                }
+            }
     }
 }
