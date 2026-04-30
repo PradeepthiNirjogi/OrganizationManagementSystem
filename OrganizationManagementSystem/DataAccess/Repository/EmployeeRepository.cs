@@ -155,7 +155,7 @@ namespace OrganizationManagementSystem.DataAccess.Repository
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .Select(e => new EmployeeGridModel
-                    { 
+                    {
                         EmployeeId = e.EmployeeId,
                         Name = e.Name,
                         RoleName = e.Role.RoleName,
@@ -179,17 +179,17 @@ namespace OrganizationManagementSystem.DataAccess.Repository
             return db.Department.Select(d => d.DepartmentName).ToList();
                 }
 
-        
         public List<string> GetManagers()
         {
             using var db = new OrganizationDbContext();
+
             var list = db.Employee
-                //.Where(e => e.RoleId == 1)
-                .Select(e => e.Name)
-                .ToList();
-            list.Insert(0, "-");
+                         .Select(e => e.Name)
+                         .ToList();
+
+            list.Insert(0, "-"); 
             return list;
-            }
+        }
         public void Add(Employee e)
 
         {

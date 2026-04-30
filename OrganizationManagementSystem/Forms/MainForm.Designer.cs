@@ -136,14 +136,6 @@
             btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
             // 
-            // employeeFilterControl1
-            // 
-            employeeFilterControl1.Location = new Point(52, -30);
-            employeeFilterControl1.Name = "employeeFilterControl1";
-            employeeFilterControl1.Size = new Size(838, 175);
-            employeeFilterControl1.TabIndex = 8;
-            employeeFilterControl1.Load += employeeFilterControl1_Load;
-            // 
             // btnNext
             // 
             btnNext.BackColor = Color.RosyBrown;
