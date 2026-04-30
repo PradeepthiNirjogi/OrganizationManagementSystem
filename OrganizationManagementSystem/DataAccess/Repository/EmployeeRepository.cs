@@ -184,7 +184,7 @@ namespace OrganizationManagementSystem.DataAccess.Repository
         {
             using var db = new OrganizationDbContext();
             var list = db.Employee
-                .Where(e => e.RoleId == 1)
+                //.Where(e => e.RoleId == 1)
                 .Select(e => e.Name)
                 .ToList();
             list.Insert(0, "-");

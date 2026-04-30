@@ -249,6 +249,8 @@ namespace OrganizationManagementSystem.Forms
                 Log.Information("loaded successfully");
                 ApplyFilter();
             }
+        }
+
 
         private void employeeFilterControl1_Load(object sender, EventArgs e)
         {
