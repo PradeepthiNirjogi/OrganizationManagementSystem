@@ -50,9 +50,9 @@
             pnlDeptBorder = new Panel();
             pnlManagerBorder = new Panel();
             lblEmailError = new Label();
-            lblRoleNameError = new Label();
-            lblDeptError = new Label();
             lblManagerError = new Label();
+            lblDeptError = new Label();
+            lblRoleNameError = new Label();
             pnlNameBorder.SuspendLayout();
             pnlEmailBorder.SuspendLayout();
             pnlRoleNameBorder.SuspendLayout();
@@ -97,7 +97,7 @@
             cmbRole.Location = new Point(3, 2);
             cmbRole.Name = "cmbRole";
             cmbRole.Size = new Size(311, 28);
-            cmbRole.TabIndex = 3;
+            cmbRole.TabIndex = 0;
             cmbRole.SelectedIndexChanged += cmbRole_SelectedIndexChanged;
             // 
             // LabelDepartment
@@ -116,7 +116,7 @@
             cmbDepartment.Location = new Point(3, 3);
             cmbDepartment.Name = "cmbDepartment";
             cmbDepartment.Size = new Size(310, 28);
-            cmbDepartment.TabIndex = 5;
+            cmbDepartment.TabIndex = 0;
             cmbDepartment.SelectedIndexChanged += cmbDepartment_SelectedIndexChanged;
             // 
             // label4
@@ -143,7 +143,7 @@
             cmbManager.Location = new Point(6, 3);
             cmbManager.Name = "cmbManager";
             cmbManager.Size = new Size(308, 28);
-            cmbManager.TabIndex = 9;
+            cmbManager.TabIndex = 0;
             cmbManager.SelectedIndexChanged += cmbManager_SelectedIndexChanged;
             // 
             // btnSave
@@ -153,7 +153,7 @@
             btnSave.Location = new Point(249, 482);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(120, 42);
-            btnSave.TabIndex = 10;
+            btnSave.TabIndex = 5;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
@@ -165,7 +165,7 @@
             btnCancel.Location = new Point(449, 482);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(115, 42);
-            btnCancel.TabIndex = 12;
+            btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
@@ -195,7 +195,7 @@
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "Enter the Employee Mail";
             txtEmail.Size = new Size(311, 27);
-            txtEmail.TabIndex = 16;
+            txtEmail.TabIndex = 0;
             txtEmail.Leave += txtEmail_Leave;
             // 
             // lblNameError
@@ -216,7 +216,7 @@
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Enter Employee Name";
             txtName.Size = new Size(311, 27);
-            txtName.TabIndex = 13;
+            txtName.TabIndex = 0;
             txtName.Leave += txtName_Leave;
             // 
             // pnlNameBorder
@@ -275,28 +275,6 @@
             lblEmailError.TabIndex = 19;
             lblEmailError.Visible = false;
             // 
-            // lblRoleNameError
-            // 
-            lblRoleNameError.AutoSize = true;
-            lblRoleNameError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRoleNameError.ForeColor = Color.Red;
-            lblRoleNameError.Location = new Point(264, 290);
-            lblRoleNameError.Name = "lblRoleNameError";
-            lblRoleNameError.Size = new Size(0, 17);
-            lblRoleNameError.TabIndex = 20;
-            lblRoleNameError.Visible = false;
-            // 
-            // lblDeptError
-            // 
-            lblDeptError.AutoSize = true;
-            lblDeptError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDeptError.ForeColor = Color.Red;
-            lblDeptError.Location = new Point(263, 363);
-            lblDeptError.Name = "lblDeptError";
-            lblDeptError.Size = new Size(0, 17);
-            lblDeptError.TabIndex = 21;
-            lblDeptError.Click += label2_Click;
-            // 
             // lblManagerError
             // 
             lblManagerError.AutoSize = true;
@@ -308,15 +286,39 @@
             lblManagerError.TabIndex = 22;
             lblManagerError.Visible = false;
             // 
+            // lblDeptError
+            // 
+            lblDeptError.AutoSize = true;
+            lblDeptError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDeptError.ForeColor = Color.Red;
+            lblDeptError.Location = new Point(264, 290);
+            lblDeptError.Name = "lblDeptError";
+            lblDeptError.Size = new Size(43, 17);
+            lblDeptError.TabIndex = 23;
+            lblDeptError.Text = "label2";
+            lblDeptError.Visible = false;
+            // 
+            // lblRoleNameError
+            // 
+            lblRoleNameError.AutoSize = true;
+            lblRoleNameError.Font = new Font("Segoe UI Semibold", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblRoleNameError.ForeColor = Color.Red;
+            lblRoleNameError.Location = new Point(264, 363);
+            lblRoleNameError.Name = "lblRoleNameError";
+            lblRoleNameError.Size = new Size(43, 17);
+            lblRoleNameError.TabIndex = 24;
+            lblRoleNameError.Text = "label3";
+            lblRoleNameError.Visible = false;
+            // 
             // AddEmployeeForm
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(936, 560);
-            Controls.Add(lblManagerError);
-            Controls.Add(lblDeptError);
             Controls.Add(lblRoleNameError);
+            Controls.Add(lblDeptError);
+            Controls.Add(lblManagerError);
             Controls.Add(lblEmailError);
             Controls.Add(pnlManagerBorder);
             Controls.Add(pnlDeptBorder);
@@ -379,8 +381,8 @@
         private Panel pnlDeptBorder;
         private Panel pnlManagerBorder;
         private Label lblEmailError;
-        private Label lblRoleNameError;
-        private Label lblDeptError;
         private Label lblManagerError;
+        private Label lblDeptError;
+        private Label lblRoleNameError;
     }
 }

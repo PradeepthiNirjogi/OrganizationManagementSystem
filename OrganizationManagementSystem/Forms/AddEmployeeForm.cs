@@ -27,6 +27,53 @@ namespace OrganizationManagementSystem.Forms
         {
             LoadDropdowns();
             isFormLoading = false;
+
+            pnlNameBorder.TabStop = false;
+            pnlEmailBorder.TabStop = false;
+            pnlRoleNameBorder.TabStop = false;
+            pnlDeptBorder.TabStop = false;
+            pnlManagerBorder.TabStop = false;
+
+            LabelName.TabStop = false;
+            LabelEmail.TabStop = false;
+            LabelDepartment.TabStop = false;
+            LabelRole.TabStop = false;
+            LabelManager.TabStop = false;
+            label1.TabStop = false;
+
+
+            cmbDepartment.Leave += cmbDepartment_Leave;
+            cmbRole.Leave += cmbRole_Leave;
+            cmbManager.Leave += cmbManager_Leave;
+
+            statusStrip1.TabStop = false;
+            FixTabOrder();
+
+
+        }
+
+        private void cmbDepartment_Leave(object sender, EventArgs e)
+        {
+            if (isFormLoading) return;
+
+            userInteracted = true;
+            ValidateDepartment();
+        }
+
+        private void cmbRole_Leave(object sender, EventArgs e)
+        {
+            if (isFormLoading) return;
+
+            userInteracted = true;
+            ValidateRole();
+        }
+
+        private void cmbManager_Leave(object sender, EventArgs e)
+        {
+            if (isFormLoading) return;
+
+            userInteracted = true;
+            ValidateManager();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -57,7 +104,9 @@ namespace OrganizationManagementSystem.Forms
 
         private bool ValidateEmail()
         {
-            if (string.IsNullOrWhiteSpace(txtEmail.Text))
+            string email = txtEmail.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(email))
             {
                 lblEmailError.Text = ValidationMessages.EmailRequired;
                 lblEmailError.Visible = true;
@@ -65,17 +114,9 @@ namespace OrganizationManagementSystem.Forms
                 return false;
             }
 
-            if (!Regex.IsMatch(txtEmail.Text, @"^[^@]+@[^@]+\.[^@]+$"))
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 lblEmailError.Text = ValidationMessages.EmailInvalid;
-                pnlEmailBorder.BackColor = Color.LightCoral;
-                lblEmailError.Visible = true;
-                return false;
-            }
-
-            if (!txtEmail.Text.EndsWith("@org.com", StringComparison.OrdinalIgnoreCase))
-            {
-                lblEmailError.Text = "Only company email (@org.com) is allowed";
                 lblEmailError.Visible = true;
                 pnlEmailBorder.BackColor = Color.LightCoral;
                 return false;
@@ -85,10 +126,10 @@ namespace OrganizationManagementSystem.Forms
             pnlEmailBorder.BackColor = Color.Gray;
             return true;
         }
-
         private bool ValidateRole()
         {
             if (isFormLoading) return true;
+            if (!userInteracted) return true;
 
             if (!int.TryParse(cmbRole.SelectedValue?.ToString(), out int roleId) || roleId == 0)
             {
@@ -105,6 +146,10 @@ namespace OrganizationManagementSystem.Forms
         private bool ValidateDepartment()
         {
             if (isFormLoading) return true;
+
+            if(!userInteracted)
+        return true;
+
 
             if (!int.TryParse(cmbDepartment.SelectedValue?.ToString(), out int deptId) || deptId == 0)
             {
@@ -198,9 +243,12 @@ namespace OrganizationManagementSystem.Forms
             this.Close();
         }
 
+        private bool userInteracted = false;
         private void cmbRole_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isFormLoading) return;
+
+            userInteracted = true;
 
             ValidateRole();
 
@@ -247,6 +295,9 @@ namespace OrganizationManagementSystem.Forms
         {
             if (isFormLoading) return;
 
+            userInteracted = true;
+            ValidateDepartment();
+
             string dept = cmbDepartment.Text;
 
             if (dept == "HR" || dept == "Finance" || dept == "Support")
@@ -271,12 +322,23 @@ namespace OrganizationManagementSystem.Forms
         private void cmbManager_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (isFormLoading) return;
+
+            userInteracted = true;
+
             ValidateManager();
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
 
+        private void FixTabOrder()
+        {
+            // Set TOP LEVEL control order (this is the real fix)
+            this.Controls.SetChildIndex(pnlNameBorder, 0);
+            this.Controls.SetChildIndex(pnlEmailBorder, 1);
+            this.Controls.SetChildIndex(pnlRoleNameBorder, 2); 
+            this.Controls.SetChildIndex(pnlDeptBorder, 3);     
+            this.Controls.SetChildIndex(pnlManagerBorder, 4);
+            this.Controls.SetChildIndex(btnSave, 5);
+            this.Controls.SetChildIndex(btnCancel, 6);
         }
     }
 }

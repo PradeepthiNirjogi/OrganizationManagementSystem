@@ -39,13 +39,14 @@
             cmbManager = new ComboBox();
             btnSearch = new Button();
             btnClear = new Button();
+            OrganizationManagementSystem = new Label();
             SuspendLayout();
             // 
             // txtEmployeeName
             // 
             txtEmployeeName.AutoSize = true;
             txtEmployeeName.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtEmployeeName.Location = new Point(39, 65);
+            txtEmployeeName.Location = new Point(32, 73);
             txtEmployeeName.Name = "txtEmployeeName";
             txtEmployeeName.Size = new Size(165, 23);
             txtEmployeeName.TabIndex = 0;
@@ -53,7 +54,7 @@
             // 
             // txtName
             // 
-            txtName.Location = new Point(220, 64);
+            txtName.Location = new Point(220, 72);
             txtName.Name = "txtName";
             txtName.Size = new Size(162, 27);
             txtName.TabIndex = 1;
@@ -63,7 +64,7 @@
             lblRole.AutoSize = true;
             lblRole.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblRole.ForeColor = SystemColors.ControlText;
-            lblRole.Location = new Point(451, 68);
+            lblRole.Location = new Point(438, 76);
             lblRole.Name = "lblRole";
             lblRole.Size = new Size(90, 23);
             lblRole.TabIndex = 2;
@@ -73,7 +74,7 @@
             // 
             cmbRole.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRole.FormattingEnabled = true;
-            cmbRole.Location = new Point(577, 67);
+            cmbRole.Location = new Point(567, 75);
             cmbRole.Name = "cmbRole";
             cmbRole.Size = new Size(151, 28);
             cmbRole.TabIndex = 3;
@@ -82,11 +83,11 @@
             // 
             lblDept.AutoSize = true;
             lblDept.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDept.Location = new Point(39, 106);
+            lblDept.Location = new Point(39, 125);
             lblDept.Name = "lblDept";
-            lblDept.Size = new Size(165, 23);
+            lblDept.Size = new Size(158, 23);
             lblDept.TabIndex = 4;
-            lblDept.Text = "DepartmentName :";
+            lblDept.Text = "Department         :";
             // 
             // groupBox1
             // 
@@ -101,7 +102,7 @@
             // 
             cmbDepartment.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbDepartment.FormattingEnabled = true;
-            cmbDepartment.Location = new Point(220, 101);
+            cmbDepartment.Location = new Point(220, 124);
             cmbDepartment.Name = "cmbDepartment";
             cmbDepartment.Size = new Size(162, 28);
             cmbDepartment.TabIndex = 6;
@@ -110,7 +111,7 @@
             // 
             lblManager.AutoSize = true;
             lblManager.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblManager.Location = new Point(451, 102);
+            lblManager.Location = new Point(437, 124);
             lblManager.Name = "lblManager";
             lblManager.Size = new Size(91, 23);
             lblManager.TabIndex = 7;
@@ -120,7 +121,7 @@
             // 
             cmbManager.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbManager.FormattingEnabled = true;
-            cmbManager.Location = new Point(577, 101);
+            cmbManager.Location = new Point(577, 124);
             cmbManager.Name = "cmbManager";
             cmbManager.Size = new Size(151, 28);
             cmbManager.TabIndex = 8;
@@ -129,7 +130,7 @@
             // 
             btnSearch.BackColor = Color.RoyalBlue;
             btnSearch.ForeColor = Color.WhiteSmoke;
-            btnSearch.Location = new Point(325, 145);
+            btnSearch.Location = new Point(319, 170);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(94, 29);
             btnSearch.TabIndex = 9;
@@ -141,7 +142,7 @@
             // 
             btnClear.BackColor = SystemColors.ControlDark;
             btnClear.ForeColor = Color.WhiteSmoke;
-            btnClear.Location = new Point(438, 145);
+            btnClear.Location = new Point(438, 170);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(94, 29);
             btnClear.TabIndex = 10;
@@ -149,10 +150,22 @@
             btnClear.UseVisualStyleBackColor = false;
             btnClear.Click += btnClear_Click;
             // 
+            // OrganizationManagementSystem
+            // 
+            OrganizationManagementSystem.AutoSize = true;
+            OrganizationManagementSystem.Font = new Font("Arial", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            OrganizationManagementSystem.ForeColor = Color.Navy;
+            OrganizationManagementSystem.Location = new Point(220, 14);
+            OrganizationManagementSystem.Name = "OrganizationManagementSystem";
+            OrganizationManagementSystem.Size = new Size(478, 33);
+            OrganizationManagementSystem.TabIndex = 11;
+            OrganizationManagementSystem.Text = "Organization Management System";
+            // 
             // EmployeeFilterControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(OrganizationManagementSystem);
             Controls.Add(btnClear);
             Controls.Add(btnSearch);
             Controls.Add(cmbManager);
@@ -183,5 +196,6 @@
         private ComboBox cmbManager;
         private Button btnSearch;
         private Button btnClear;
+        private Label OrganizationManagementSystem;
     }
 }

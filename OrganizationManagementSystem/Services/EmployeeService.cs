@@ -88,9 +88,9 @@ namespace OrganizationManagementSystem.Services
             repo.UpdateEmployee(id, name, roleId, deptId, newmanagerId);
         }
 
-
-        // ================= EMAIL VALIDATION =================
-        public bool IsEmailExists(string email)
+         
+    // ================= EMAIL VALIDATION =================
+    public bool IsEmailExists(string email)
     {
         using (var context = new OrganizationDbContext())
         {

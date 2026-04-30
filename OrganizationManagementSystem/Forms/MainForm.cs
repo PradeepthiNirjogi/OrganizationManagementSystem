@@ -18,6 +18,7 @@ namespace OrganizationManagementSystem.Forms
         {
             InitializeComponent();
             LoadEmployee();
+            employeeFilterControl1.LoadFilterDropdowns();
 
             employeeFilterControl1.SearchClicked += EmployeeFilter_Search;
             employeeFilterControl1.ClearClicked += EmployeeFilter_Clear;
@@ -100,7 +101,8 @@ namespace OrganizationManagementSystem.Forms
         private void btnDelete_Click(object sender, EventArgs e)
         {
             Log.Information("Deleting the selected employee");
-            try {
+            try
+            {
                 if (dgvEmployees.SelectedRows.Count == 0)
                 {
                     Log.Warning("please select a record to delete");
@@ -150,22 +152,22 @@ namespace OrganizationManagementSystem.Forms
                 Log.Information("Employee deleted successfully");
                 MessageBox.Show("Employee deleted successfully");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error("unexpected error occured during deletion {ex}", ex.Message);
                 MessageBox.Show("unexpected error occured during deletion {ex}\", ex.Message");
             }
-            }
+        }
 
 
 
         // ================= FILTER =================
-        private void btnFilter_Click(object sender, EventArgs e)
-        {
-            employeeFilterControl1.Visible = true;
-            employeeFilterControl1.EnableFilterFields();
-            employeeFilterControl1.LoadFilterDropdowns();
-        }
+        //private void btnFilter_Click(object sender, EventArgs e)
+        //{
+        //    employeeFilterControl1.Visible = true;
+        //    //employeeFilterControl1.EnableFilterFields();
+        //    //employeeFilterControl1.LoadFilterDropdowns();
+        //}
 
         private void EmployeeFilter_Search(object sender, EventArgs e)
         {
@@ -229,6 +231,7 @@ namespace OrganizationManagementSystem.Forms
             });
         }
 
+
        
         private void btnNext_Click(object sender, EventArgs e)
         {
@@ -247,6 +250,11 @@ namespace OrganizationManagementSystem.Forms
                 Log.Information("loaded successfully");
                 ApplyFilter();
             }
+
+        }
+
+        private void dgvEmployees_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
         }
     }

@@ -36,9 +36,9 @@
             btnSave = new Button();
             btnFilter = new Button();
             btnRefresh = new Button();
-            employeeFilterControl1 = new EmployeeFilterControl();
             btnNext = new Button();
             btnPrevious = new Button();
+            employeeFilterControl1 = new EmployeeFilterControl();
             ((System.ComponentModel.ISupportInitialize)dgvEmployees).BeginInit();
             SuspendLayout();
             // 
@@ -46,7 +46,7 @@
             // 
             Label1.AutoSize = true;
             Label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Label1.Location = new Point(52, 148);
+            Label1.Location = new Point(62, 245);
             Label1.Name = "Label1";
             Label1.Size = new Size(185, 28);
             Label1.TabIndex = 0;
@@ -56,21 +56,22 @@
             // 
             dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvEmployees.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvEmployees.Location = new Point(52, 209);
+            dgvEmployees.Location = new Point(62, 306);
             dgvEmployees.Name = "dgvEmployees";
             dgvEmployees.ReadOnly = true;
             dgvEmployees.RowHeadersWidth = 51;
             dgvEmployees.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEmployees.Size = new Size(856, 374);
+            dgvEmployees.Size = new Size(856, 355);
             dgvEmployees.TabIndex = 1;
+            dgvEmployees.CellContentClick += dgvEmployees_CellContentClick;
             // 
             // btnAdd
             // 
             btnAdd.BackColor = Color.FromArgb(0, 192, 0);
             btnAdd.ForeColor = Color.WhiteSmoke;
-            btnAdd.Location = new Point(71, 621);
+            btnAdd.Location = new Point(513, 248);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(140, 36);
+            btnAdd.Size = new Size(115, 36);
             btnAdd.TabIndex = 2;
             btnAdd.Text = "Add Record";
             btnAdd.UseVisualStyleBackColor = false;
@@ -80,9 +81,9 @@
             // 
             btnUpdate.BackColor = Color.Salmon;
             btnUpdate.ForeColor = Color.WhiteSmoke;
-            btnUpdate.Location = new Point(229, 622);
+            btnUpdate.Location = new Point(627, 717);
             btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(139, 36);
+            btnUpdate.Size = new Size(129, 36);
             btnUpdate.TabIndex = 3;
             btnUpdate.Text = "UpdateRecord";
             btnUpdate.UseVisualStyleBackColor = false;
@@ -92,9 +93,9 @@
             // 
             btnDelete.BackColor = Color.Red;
             btnDelete.ForeColor = Color.WhiteSmoke;
-            btnDelete.Location = new Point(396, 619);
+            btnDelete.Location = new Point(658, 248);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(150, 38);
+            btnDelete.Size = new Size(111, 36);
             btnDelete.TabIndex = 4;
             btnDelete.Text = "DeleteRecord";
             btnDelete.UseVisualStyleBackColor = false;
@@ -104,9 +105,9 @@
             // 
             btnSave.BackColor = Color.RoyalBlue;
             btnSave.ForeColor = Color.WhiteSmoke;
-            btnSave.Location = new Point(564, 618);
+            btnSave.Location = new Point(786, 713);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(151, 40);
+            btnSave.Size = new Size(132, 40);
             btnSave.TabIndex = 5;
             btnSave.Text = "SaveRecord";
             btnSave.UseVisualStyleBackColor = false;
@@ -116,18 +117,18 @@
             // 
             btnFilter.BackColor = Color.Indigo;
             btnFilter.ForeColor = Color.WhiteSmoke;
-            btnFilter.Location = new Point(736, 618);
+            btnFilter.Location = new Point(250, 704);
             btnFilter.Name = "btnFilter";
             btnFilter.Size = new Size(133, 36);
             btnFilter.TabIndex = 6;
             btnFilter.Text = "FilterRecord";
             btnFilter.UseVisualStyleBackColor = false;
-            btnFilter.Click += btnFilter_Click;
+            btnFilter.Visible = false;
             // 
             // btnRefresh
             // 
-            btnRefresh.BackColor = Color.LightGray;
-            btnRefresh.Location = new Point(787, 148);
+            btnRefresh.BackColor = Color.Tan;
+            btnRefresh.Location = new Point(797, 248);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.Size = new Size(121, 38);
             btnRefresh.TabIndex = 7;
@@ -135,19 +136,11 @@
             btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
             // 
-            // employeeFilterControl1
-            // 
-            employeeFilterControl1.Location = new Point(52, -30);
-            employeeFilterControl1.Name = "employeeFilterControl1";
-            employeeFilterControl1.Size = new Size(838, 175);
-            employeeFilterControl1.TabIndex = 8;
-            
-            // 
             // btnNext
             // 
             btnNext.BackColor = Color.RosyBrown;
             btnNext.ForeColor = Color.WhiteSmoke;
-            btnNext.Location = new Point(535, 155);
+            btnNext.Location = new Point(762, 665);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(99, 31);
             btnNext.TabIndex = 9;
@@ -159,22 +152,29 @@
             // 
             btnPrevious.BackColor = SystemColors.WindowFrame;
             btnPrevious.ForeColor = Color.WhiteSmoke;
-            btnPrevious.Location = new Point(640, 155);
+            btnPrevious.Location = new Point(658, 667);
             btnPrevious.Name = "btnPrevious";
-            btnPrevious.Size = new Size(111, 31);
+            btnPrevious.Size = new Size(98, 31);
             btnPrevious.TabIndex = 10;
             btnPrevious.Text = "PreviousPage";
             btnPrevious.UseVisualStyleBackColor = false;
             btnPrevious.Click += btnPrevious_Click;
             // 
+            // employeeFilterControl1
+            // 
+            employeeFilterControl1.Location = new Point(62, 12);
+            employeeFilterControl1.Name = "employeeFilterControl1";
+            employeeFilterControl1.Size = new Size(856, 213);
+            employeeFilterControl1.TabIndex = 11;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(945, 670);
+            ClientSize = new Size(945, 800);
+            Controls.Add(employeeFilterControl1);
             Controls.Add(btnPrevious);
             Controls.Add(btnNext);
-            Controls.Add(employeeFilterControl1);
             Controls.Add(btnRefresh);
             Controls.Add(btnFilter);
             Controls.Add(btnSave);
@@ -200,8 +200,8 @@
         private Button btnSave;
         private Button btnFilter;
         private Button btnRefresh;
-        private EmployeeFilterControl employeeFilterControl1;
         private Button btnNext;
         private Button btnPrevious;
+        private EmployeeFilterControl employeeFilterControl1;
     }
 }
