@@ -68,17 +68,66 @@ namespace OrganizationManagementSystem.Services
             //{
             //    throw new Exception("Employee must report to a Manager.");
             //}
+            // to get the roleid of a manager;
             int managerroleId = repo.GetRoleId("Manager");
-            int currentRoleId = repo.GetCurrentRoleId(id);
-            if (currentRoleId ==  managerroleId && roleId != managerroleId)
-            {
-                throw new Exception("manager can't be a employee");
-            }
-            if (roleId ==managerroleId)
-            {
-                manager = null;
-                Log.Information("when the roles like developer or other becomes managers the manager id need to be null");
+            //to get the role id of a current roleid before changing
+            //int currentRoleId = repo.GetCurrentRoleId(id);
+            //if (currentRoleId ==  managerroleId && roleId != managerroleId)
+            //{
+            //    throw new Exception("manager can't be a employee");
+            //}
+            //if (roleId ==managerroleId)
+            //{
+            //    manager = null;
+            //    Log.Information("when the roles like developer or other becomes managers the manager id need to be null");
 
+            //}
+            //if (roleId != managerroleId)
+            //{
+            //    if (!string.IsNullOrWhiteSpace(manager) && manager != "-")
+            //    {
+            //        if (string.Equals(name?.Trim(), manager?.Trim(), StringComparison.OrdinalIgnoreCase))
+            //        {
+            //            Log.Information("Employee name and manager name should be different. Employee: {Name}", name);
+            //            throw new Exception("Employee name should not be the same as Manager name");
+            //        }
+            //        newmanagerId = repo.GetManagerId(manager);
+            //    }
+            //}
+            // replace your current checks with something like:
+            //int managerroleId = repo.GetRoleId("Manager");
+            int currentRoleId = repo.GetCurrentRoleId(id);
+
+            if (currentRoleId == managerroleId && roleId != managerroleId)
+                throw new Exception("manager can't be a employee");
+
+            // If new role is Manager, ensure no manager was selected
+            if (roleId == managerroleId)
+            {
+                if (!string.IsNullOrWhiteSpace(manager) && manager != "-")
+                {
+                    Log.Information("Attempt to assign a manager to a Manager");
+                    throw new Exception("Manager can't be assigned to manager");
+                }
+                newmanagerId = null;
+                Log.Information("Role changed to Manager; clearing manager assignment");
+            }
+            else
+            {
+                // For non-managers ensure manager is not the same person
+                if (!string.IsNullOrWhiteSpace(manager) && manager != "-")
+                {
+                    if (string.Equals(name?.Trim(), manager?.Trim(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        Log.Information("Employee name and manager name should be different. Employee: {Name}", name);
+                        throw new Exception("Employee name should not be the same as Manager name");
+                    }
+                    newmanagerId = repo.GetManagerId(manager);
+                }
+                else
+                {
+                    newmanagerId = null;
+                }
             }
             //if (role == manager)
             //{

@@ -250,10 +250,10 @@ namespace OrganizationManagementSystem.Forms
                 Log.Information("loaded successfully");
                 ApplyFilter();
             }
-
         }
 
-        private void dgvEmployees_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void employeeFilterControl1_Load(object sender, EventArgs e)
         {
 
         }

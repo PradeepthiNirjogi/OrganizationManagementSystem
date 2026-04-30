@@ -63,7 +63,7 @@
             dgvEmployees.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvEmployees.Size = new Size(856, 355);
             dgvEmployees.TabIndex = 1;
-            dgvEmployees.CellContentClick += dgvEmployees_CellContentClick;
+            //dgvEmployees.CellContentClick += dgvEmployees_CellContentClick;
             // 
             // btnAdd
             // 
