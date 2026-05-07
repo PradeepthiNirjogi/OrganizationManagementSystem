@@ -25,16 +25,16 @@ namespace OrganizationManagementSystem.Forms
             btnClear.Enabled = false;
         }
 
-        // Enables filter inputs when FilterRecord is clicked
-        //public void EnableFilterFields()
-        //{
-        //    txtName.Enabled = true;
-        //    cmbRole.Enabled = true;
-        //    cmbDepartment.Enabled = true;
-        //    cmbManager.Enabled = true;
-        //    btnSearch.Enabled = true;
-        //    btnClear.Enabled = true;
-        //}
+        //Enables filter inputs when FilterRecord is clicked
+        public void EnableFilterFields()
+        {
+            txtName.Enabled = true;
+            cmbRole.Enabled = true;
+            cmbDepartment.Enabled = true;
+            cmbManager.Enabled = true;
+            btnSearch.Enabled = true;
+            btnClear.Enabled = true;
+        }
 
         // ================= DROPDOWNS =================
 

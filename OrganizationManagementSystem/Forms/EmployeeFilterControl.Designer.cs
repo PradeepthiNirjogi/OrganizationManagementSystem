@@ -39,7 +39,6 @@
             cmbManager = new ComboBox();
             btnSearch = new Button();
             btnClear = new Button();
-            OrganizationManagementSystem = new Label();
             SuspendLayout();
             // 
             // txtEmployeeName
@@ -150,22 +149,10 @@
             btnClear.UseVisualStyleBackColor = false;
             btnClear.Click += btnClear_Click;
             // 
-            // OrganizationManagementSystem
-            // 
-            OrganizationManagementSystem.AutoSize = true;
-            OrganizationManagementSystem.Font = new Font("Arial", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            OrganizationManagementSystem.ForeColor = Color.Navy;
-            OrganizationManagementSystem.Location = new Point(220, 14);
-            OrganizationManagementSystem.Name = "OrganizationManagementSystem";
-            OrganizationManagementSystem.Size = new Size(478, 33);
-            OrganizationManagementSystem.TabIndex = 11;
-            OrganizationManagementSystem.Text = "Organization Management System";
-            // 
             // EmployeeFilterControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(OrganizationManagementSystem);
             Controls.Add(btnClear);
             Controls.Add(btnSearch);
             Controls.Add(cmbManager);
@@ -196,6 +183,5 @@
         private ComboBox cmbManager;
         private Button btnSearch;
         private Button btnClear;
-        private Label OrganizationManagementSystem;
     }
 }

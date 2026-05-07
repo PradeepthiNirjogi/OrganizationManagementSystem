@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             label1 = new Label();
             LabelName = new Label();
             LabelRole = new Label();
@@ -53,11 +54,15 @@
             lblManagerError = new Label();
             lblDeptError = new Label();
             lblRoleNameError = new Label();
+            menuStrip1 = new MenuStrip();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            data1ToolStripMenuItem = new ToolStripMenuItem();
             pnlNameBorder.SuspendLayout();
             pnlEmailBorder.SuspendLayout();
             pnlRoleNameBorder.SuspendLayout();
             pnlDeptBorder.SuspendLayout();
             pnlManagerBorder.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -310,6 +315,28 @@
             lblRoleNameError.Text = "label3";
             lblRoleNameError.Visible = false;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(936, 24);
+            menuStrip1.TabIndex = 25;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { data1ToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(119, 28);
+            // 
+            // data1ToolStripMenuItem
+            // 
+            data1ToolStripMenuItem.Name = "data1ToolStripMenuItem";
+            data1ToolStripMenuItem.Size = new Size(118, 24);
+            data1ToolStripMenuItem.Text = "Data1";
+            // 
             // AddEmployeeForm
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
@@ -327,6 +354,7 @@
             Controls.Add(pnlNameBorder);
             Controls.Add(lblNameError);
             Controls.Add(statusStrip1);
+            Controls.Add(menuStrip1);
             Controls.Add(LabelEmail);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
@@ -339,6 +367,7 @@
             Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Location = new Point(20, 20);
+            MainMenuStrip = menuStrip1;
             Margin = new Padding(5, 4, 5, 4);
             MaximizeBox = false;
             MinimizeBox = false;
@@ -353,6 +382,7 @@
             pnlRoleNameBorder.ResumeLayout(false);
             pnlDeptBorder.ResumeLayout(false);
             pnlManagerBorder.ResumeLayout(false);
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -384,5 +414,8 @@
         private Label lblManagerError;
         private Label lblDeptError;
         private Label lblRoleNameError;
+        private MenuStrip menuStrip1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem data1ToolStripMenuItem;
     }
 }

@@ -3,6 +3,7 @@ using OrganizationManagementSystem.DataAccess.Repository;
 using OrganizationManagementSystem.Models;
 using OrganizationManagementSystem.Services;
 using Serilog;
+using System.Reflection.PortableExecutable;
 
 namespace OrganizationManagementSystem.Forms
 {
@@ -10,28 +11,49 @@ namespace OrganizationManagementSystem.Forms
     {
         private readonly EmployeeService employeeService = new EmployeeService();
         private readonly EmployeeRepository repo = new EmployeeRepository();
+        private HamburgerMenuControl hamburgerMenuControl1;
 
         private int currentPage = 1;
         private int pagesize = 10;
-
         public MainForm()
         {
             InitializeComponent();
             LoadEmployee();
             employeeFilterControl1.LoadFilterDropdowns();
+            employeeFilterControl1.DisableFilterFields();
+
+            InitializeHamburgerMenu();
 
             employeeFilterControl1.SearchClicked += EmployeeFilter_Search;
             employeeFilterControl1.ClearClicked += EmployeeFilter_Clear;
+
+
         }
 
         // ================= LOAD =================
+        //private void LoadEmployee()
+        //{
+        //    Log.Information("loading the data");
+        //    var data = repo.LoadEmployeeData();
+        //    dgvEmployees.DataSource = data;
+
+        //}
         private void LoadEmployee()
         {
-            Log.Information("loading the data");
-            var data = repo.LoadEmployeeData();
-            dgvEmployees.DataSource = data;
+            Log.Information("Loading paginated employee data");
 
+            currentPage = 1;
+
+            dgvEmployees.DataSource = employeeService.FilterRecord(
+                roleId: 0,
+                deptId: 0,
+                name: null,
+                managerId: 0,
+                pageNumber: currentPage,
+                pageSize: pagesize
+            );
         }
+
 
         // ================= ADD =================
         private void btnAdd_Click(object sender, EventArgs e)
@@ -40,6 +62,7 @@ namespace OrganizationManagementSystem.Forms
             new AddEmployeeForm().ShowDialog();
 
         }
+
 
         // ================= UPDATE =================
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -159,15 +182,13 @@ namespace OrganizationManagementSystem.Forms
             }
         }
 
-
-
         // ================= FILTER =================
-        //private void btnFilter_Click(object sender, EventArgs e)
-        //{
-        //    employeeFilterControl1.Visible = true;
-        //    //employeeFilterControl1.EnableFilterFields();
-        //    //employeeFilterControl1.LoadFilterDropdowns();
-        //}
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            employeeFilterControl1.Visible = true;
+            //employeeFilterControl1.EnableFilterFields();
+            //employeeFilterControl1.LoadFilterDropdowns();
+        }
 
         private void EmployeeFilter_Search(object sender, EventArgs e)
         {
@@ -232,7 +253,7 @@ namespace OrganizationManagementSystem.Forms
         }
 
 
-       
+
         private void btnNext_Click(object sender, EventArgs e)
         {
             Log.Information("clicking on the next btn loading next page");
@@ -252,8 +273,139 @@ namespace OrganizationManagementSystem.Forms
             }
         }
 
+        private void btnMenuFilter_Click(object sender, EventArgs e)
+        {
+            employeeFilterControl1.Visible =
+                !employeeFilterControl1.Visible;
+        }
 
         private void employeeFilterControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
+        //addmenu
+        private void Hamburger_AddClicked(object sender, EventArgs e)
+        {
+
+            hamburgerMenuControl1.Width = 0;
+            DisableSearchMode();
+            new AddEmployeeForm().ShowDialog();
+            LoadEmployee();
+        }
+
+        //updatemenu
+        private void Hamburger_UpdateClicked(object sender, EventArgs e)
+        {
+            //hamburgerMenuControl1.Visible = false;
+            hamburgerMenuControl1.Width = 0;
+            DisableSearchMode();
+            //btnUpdate.PerformClick();
+            ExecuteUpdate();
+        }
+
+        //deletemenu
+        private void Hamburger_DeleteClicked(object sender, EventArgs e)
+        {
+            //hamburgerMenuControl1.Visible = false;
+            hamburgerMenuControl1.Width = 0;
+            DisableSearchMode();
+            //btnDelete.PerformClick();
+            ExecuteDelete();
+        }
+
+        //searchmenu
+        private void Hamburger_SearchClicked(object sender, EventArgs e)
+        {
+            hamburgerMenuControl1.Width = 0;
+            employeeFilterControl1.Visible = true;
+            employeeFilterControl1.EnableFilterFields();
+        }
+
+        private void InitializeHamburgerMenu()
+        {
+            hamburgerMenuControl1 = new HamburgerMenuControl();
+
+            hamburgerMenuControl1.Dock = DockStyle.Left;
+            hamburgerMenuControl1.Width = 0;
+            hamburgerMenuControl1.Visible = true;
+
+            hamburgerMenuControl1.AddClicked += Hamburger_AddClicked;
+            hamburgerMenuControl1.UpdateClicked += Hamburger_UpdateClicked;
+            hamburgerMenuControl1.DeleteClicked += Hamburger_DeleteClicked;
+            hamburgerMenuControl1.SearchClicked += Hamburger_SearchClicked;
+
+            pnlBody.Controls.Add(hamburgerMenuControl1);
+            hamburgerMenuControl1.BringToFront();
+        }
+
+        private void btnHamburger_Click_1(object sender, EventArgs e)
+        {
+            hamburgerMenuControl1.Visible = true;
+            if (hamburgerMenuControl1.Width == 0)
+            {
+                hamburgerMenuControl1.Width = 220;
+            }
+            else
+            {
+                hamburgerMenuControl1.Width = 0;   // col
+            }
+        }
+
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            pnlHeader.BringToFront();
+        }
+
+        private void hamburgerMenuControl2_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ExecuteUpdate()
+        {
+            if (dgvEmployees.Rows.Count == 0)
+            {
+                MessageBox.Show("No records available to update.");
+                return;
+            }
+
+            dgvEmployees.ReadOnly = false;
+            dgvEmployees.Columns["EmployeeId"].ReadOnly = true;
+            dgvEmployees.Columns["Name"].ReadOnly = false;
+            EnableDropdownColumns();
+        }
+
+        private void ExecuteDelete()
+        {
+            if (dgvEmployees.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a record to delete.");
+                return;
+            }
+
+            btnDelete_Click(this, EventArgs.Empty);
+        }
+
+
+        private void DisableSearchMode()
+        {
+            employeeFilterControl1.Visible = false;
+        }
+
+        private void pnlBody_Click(object sender, EventArgs e)
+        {
+            CloseHamburgerMenuIfOpen();
+        }
+
+        private void CloseHamburgerMenuIfOpen()
+        {
+            hamburgerMenuControl1.Visible = false;
+        }
+
+        private void dgvEmployees_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
